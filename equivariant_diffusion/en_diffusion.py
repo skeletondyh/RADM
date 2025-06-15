@@ -317,7 +317,7 @@ class EnVariationalDiffusion(torch.nn.Module):
         edge_mask = edge_mask.to(torch.bool).unsqueeze(1)
         if context is not None:
             x = torch.cat([x, context], dim=-1)
-        net_out = self.dynamics(x, t.squeeze(), edge_mask=edge_mask)
+        net_out = self.dynamics(x, t.squeeze(dim=-1), edge_mask=edge_mask)
         net_out = net_out * node_mask
         pos = diffusion_utils.remove_mean_with_mask(net_out[:, :, :self.n_dims], node_mask)
         net_out = torch.cat([pos, net_out[:, :, self.n_dims:self.n_dims + self.in_node_nf]], dim=2)
@@ -1278,14 +1278,14 @@ class EnLatentDiffusion(EnVariationalDiffusion):
 
         chain = chain_flat.view(keep_frames, n_samples, *chain_flat.size()[1:])
         chain_decoded = torch.zeros(
-            size=(*chain.size()[:-1], self.vae.in_node_nf + self.vae.n_dims), device=chain.device)
+            size=(*chain.size()[:-1], self.vae.num_classes + int(self.vae.include_charges) + self.n_dims), device=chain.device)
 
         for i in range(keep_frames):
             z_xh = chain[i]
             diffusion_utils.assert_mean_zero_with_mask(z_xh[:, :, :self.n_dims], node_mask)
 
-            x, h = self.vae.decode(z_xh, node_mask, edge_mask, context)
-            xh = torch.cat([x, h['categorical'], h['integer']], dim=2)
+            pred_x, pred_cat, pred_int = self.vae.decode(z_xh, node_mask, edge_mask)
+            xh = torch.cat([pred_x, pred_cat, pred_int], dim=2)
             chain_decoded[i] = xh
         
         chain_decoded_flat = chain_decoded.view(n_samples * keep_frames, *chain_decoded.size()[2:])

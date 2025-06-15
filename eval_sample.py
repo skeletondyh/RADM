@@ -153,12 +153,6 @@ def main():
         join(eval_args.model_path, 'eval/molecules/'), dataset_info,
         max_num=100, spheres_3d=True)
 
-    print('Sampling visualization chain.')
-    save_and_sample_chain(
-        args, eval_args, device, flow,
-        n_tries=eval_args.n_tries, n_nodes=eval_args.n_nodes,
-        dataset_info=dataset_info)
-
 
 if __name__ == "__main__":
     main()

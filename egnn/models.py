@@ -478,3 +478,24 @@ class RotationEncoder(nn.Module):
 
         return h_final
     
+    def get_adj_matrix(self, n_nodes, batch_size, device):
+        if n_nodes in self._edges_dict:
+            edges_dic_b = self._edges_dict[n_nodes]
+            if batch_size in edges_dic_b:
+                return edges_dic_b[batch_size]
+            else:
+                # get edges for a single sample
+                rows, cols = [], []
+                for batch_idx in range(batch_size):
+                    for i in range(n_nodes):
+                        for j in range(n_nodes):
+                            rows.append(i + batch_idx * n_nodes)
+                            cols.append(j + batch_idx * n_nodes)
+                edges = [torch.LongTensor(rows).to(device),
+                         torch.LongTensor(cols).to(device)]
+                edges_dic_b[batch_size] = edges
+                return edges
+        else:
+            self._edges_dict[n_nodes] = {}
+            return self.get_adj_matrix(n_nodes, batch_size, device)
+    

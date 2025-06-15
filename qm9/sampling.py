@@ -71,7 +71,7 @@ def sample_chain(args, device, flow, n_tries, dataset_info, prop_dist=None):
     node_mask = torch.ones(n_samples, n_nodes, 1).to(device)
 
     edge_mask = (1 - torch.eye(n_nodes)).unsqueeze(0)
-    edge_mask = edge_mask.repeat(n_samples, 1, 1).view(-1, 1).to(device)
+    edge_mask = edge_mask.repeat(n_samples, 1, 1).to(device)
 
     if args.probabilistic_model == 'diffusion':
         one_hot, charges, x = None, None, None

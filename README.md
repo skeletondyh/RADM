@@ -3,7 +3,7 @@
 This repo contains the official implementation of our ICML paper: ***Scalable Non-Equivariant 3D Molecule Generation via Rotational Alignment*** (https://arxiv.org/abs/2506.10186)
 
 Our code is based on [GeoLDM](https://github.com/MinkaiXu/GeoLDM) and [EDM](https://github.com/ehoogeboom/e3_diffusion_for_molecules), with the following major modifications:
-- A [non-equivariant autoencoder](https://github.com/skeletondyh/RADM/blob/ef79321ea3ad78f00e1a59e271758a32c2253280/equivariant_diffusion/en_diffusion.py#L864) used to learn rotational alignment
+- A [non-equivariant autoencoder](https://github.com/skeletondyh/RADM/blob/e573c485f96ed127d763b721f999fc7ea3ac7a75/qm9/models.py#L55) used to learn rotational alignment
 - [Diffusion Transformer](https://github.com/skeletondyh/RADM/blob/main/egnn/dit.py) as the noise prediction network of the diffusion model
 - Other minor changes to make the new modules compatible with the existing framework
 

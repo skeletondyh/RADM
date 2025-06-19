@@ -55,6 +55,10 @@ To visualize some generated molecules：
 
 ```python eval_sample.py --model_path /path/to/model --n_samples 100```
 
+### Checkpoints
+
+We provide some trained model weights [here](https://drive.google.com/drive/folders/1FwcC6sQbZj947FP33yvudEQ7SfxU4Whv?usp=drive_link). Please create a folder named `outputs` under the main folder and unzip the files into `outputs`.
+
 ### BibTeX
 
 ```

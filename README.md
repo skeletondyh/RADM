@@ -55,6 +55,24 @@ To visualize some generated molecules：
 
 ```python eval_sample.py --model_path /path/to/model --n_samples 100```
 
+### Conditional Generation
+
+To train a conditional RADM:
+
+```python qm9_ldm.py --n_epochs 4000 --n_stability_samples 500 --diffusion_noise_schedule polynomial_2 --diffusion_noise_precision 1e-5 --diffusion_steps 1000 --diffusion_loss_type l2 --batch_size 256 --lr 1e-4 --test_epochs 20 --ema_decay 0.9999 --latent_nf 1 --dp False --size base --ae_path /path/to/ae --dataset qm9_second_half --conditioning alpha --exp_name qm9_alpha```
+
+where `--conditioning` can be one of the target properties: `alpha`, `gap`, `homo`, `lumo`, `mu`, `Cv`
+
+To train a property predictor, `cd qm9/property_prediction` and then:
+
+```python main_qm9_prop.py --num_workers 2 --lr 5e-4 --property alpha --exp_name exp_class_alpha --model_name egnn```
+
+where `--property` can be one of the above target properties.
+
+To evaluate the pretrained predictor on samples drawn from RADM:
+
+```python eval_conditional_qm9.py --generators_path /path/to/model --classifiers_path qm9/property_prediction/outputs/exp_class_alpha --property alpha  --iterations 100  --batch_size 100 --task edm```
+
 ### Checkpoints
 
 We provide some trained model weights [here](https://drive.google.com/drive/folders/1FwcC6sQbZj947FP33yvudEQ7SfxU4Whv?usp=drive_link). Please create a folder named `outputs` under the main folder and unzip the files into `outputs`.
